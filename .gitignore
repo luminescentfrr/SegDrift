@@ -1,0 +1,48 @@
+# Python bytecode and package/build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+*.so
+
+# Virtual environments and local environment files
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Test, type-checker, and tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Editors and operating-system metadata
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local datasets and duplicate archives
+/kvasir/
+/kvasir.zip
+/drifting_segmentation.zip
+
+# Training/evaluation outputs and model weights
+/runs/
+wandb/
+lightning_logs/
+outputs/
+predictions/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.safetensors
+
+# Personal scratch commands containing machine-specific paths
+/Untitled-1.txt

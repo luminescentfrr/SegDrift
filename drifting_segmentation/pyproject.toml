@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drifting-segmentation"
+version = "0.1.0"
+description = "Self-contained Torch Drifting image-to-mask segmentation"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "torch",
+    "opencv-python",
+    "numpy",
+    "timm",
+]
+
+[project.scripts]
+drift-seg-train = "drifting_segmentation.train_seg:main"
+drift-seg-eval = "drifting_segmentation.evaluate_seg:main"
+drift-seg-infer = "drifting_segmentation.infer_seg:main"
+
+[tool.setuptools.packages.find]
+where = [".."]
+include = ["drifting_segmentation*", "pmf_segmentation.datasets*", "pmf_segmentation.utils*"]
+
+[tool.setuptools.package-data]
+drifting_segmentation = ["configs/*.yaml"]

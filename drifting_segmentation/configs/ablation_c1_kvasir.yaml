@@ -1,0 +1,116 @@
+dataset:
+  train_image_dir: /mnt/c/tianyu_project/datasets/Kvasir-SEG/train/images
+  train_mask_dir: /mnt/c/tianyu_project/datasets/Kvasir-SEG/train/masks
+  val_image_dir: /mnt/c/tianyu_project/datasets/Kvasir-SEG/val/images
+  val_mask_dir: /mnt/c/tianyu_project/datasets/Kvasir-SEG/val/masks
+  image_size: 256
+  image_channels: 3
+  mask_channels: 1
+  mask_suffix: ''
+  num_workers: 8
+  pin_memory: true
+  augment: true
+
+runtime:
+  device: auto
+  seed: 42
+
+model:
+  generator_type: unet
+  input_size: 256
+  noise_channels: 2        # C1: prior occupies second channel
+  out_channels: 1
+  patch_size: 16
+  hidden_size: 768
+  depth: 12
+  num_heads: 12
+  mlp_ratio: 4.0
+  cond_dim: 768
+  n_cond_tokens: 16
+  noise_classes: 64
+  noise_coords: 32
+  use_qknorm: true
+  use_swiglu: true
+  use_rope: true
+  use_rmsnorm: true
+  use_checkpoint: true
+  attn_fp32: true
+
+feature:
+  input_mode: masked_image  # C2 off
+  use_dinov3: true
+  dinov3_name: vit_base_patch16_dinov3.lvd1689m
+  dinov3_pretrained: true
+  dinov3_image_size: 256
+  use_convnext: false
+  convnext_name: convnextv2_base.fcmae_ft_in22k_in1k
+  convnext_pretrained: true
+  use_mae: false
+  mae_path: null
+  freeze: true
+  selected:
+    dinov3: ["dinov3_patch", "dinov3_cls", "dinov3_mean", "dinov3_std"]
+
+prior:
+  use_cls_calibration: true  # C1 on
+  dinov3_name: vit_base_patch16_dinov3.lvd1689m
+  dinov3_pretrained: true
+  dinov3_image_size: 256
+  cls_adapter_hidden: 1024
+  cls_prior_temperature: 0.07
+  lambda_cls_prior: 0.1
+  focal_alpha: 0.25
+  focal_gamma: 2.0
+  detach_prior_input: true
+  freeze_dino: true
+
+memory:
+  positive_bank_size: 128
+  negative_bank_size: 2048
+  neg_per_sample: 16
+  pos_per_sample: 4
+  negative_source: gt        # C3 off
+  historical_pred_ratio: 0.5
+  warmup_steps: 500
+  hard_neg_thresh: 0.3
+
+drift:
+  R_list: [0.2, 0.05, 0.02]
+
+forward:
+  gen_per_image: 4
+  cfg_min: 1.0
+  cfg_max: 4.0
+  neg_cfg_pw: 5.0
+  no_cfg_frac: 0.0
+
+loss:
+  lambda_drift: 0.1
+  lambda_bce: 0.6
+  lambda_dice: 0.9
+  lambda_boundary: 0.2
+  lambda_lovasz: 0.3
+
+training:
+  batch_size: 2
+  total_steps: 100000
+  learning_rate: 0.0001
+  warmup_steps: 10000
+  lr_schedule: constant
+  weight_decay: 0.01
+  adam_b1: 0.9
+  adam_b2: 0.95
+  grad_clip: 1.0
+  ema_decay: 0.999
+  amp: false
+  log_every: 20
+  val_every: 500
+  ckpt_every: 1000
+  best_metric: dice
+
+validation:
+  batch_size: 2
+
+sampling:
+  cfg_scale: 1.0
+  threshold: 0.45
