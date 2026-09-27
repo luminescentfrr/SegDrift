@@ -8,6 +8,8 @@ in [`drifting_segmentation/`](drifting_segmentation/README.md).
 ## Installation
 
 ```bash
+conda create -n segdrift python=3.10
+conda activate segdrift
 pip install -e drifting_segmentation
 ```
 
