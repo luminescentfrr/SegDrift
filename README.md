@@ -1,8 +1,6 @@
-# SegDrift
+# SegDrift: Prior-Guided Semantic Drifting with Hard Negative Mining for Medical Image Segmentation
 
-SegDrift is a PyTorch image-to-mask segmentation implementation built around
-image-conditioned drifting, DINOv3 features, and optional CLS-prior
-calibration.
+Official repository for: *[SegDrift: Prior-Guided Semantic Drifting with Hard Negative Mining for Medical Image Segmentation]
 
 The Python package, experiment configurations, and detailed usage guide live
 in [`drifting_segmentation/`](drifting_segmentation/README.md).
